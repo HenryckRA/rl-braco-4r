@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "braco4"
+version = "0.1.0"
+description = "Braço robótico de 4 juntas controlado por torque com Aprendizado por Reforço (GBC063 - UFU)"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "gymnasium>=1.0",
+    "stable-baselines3>=2.3",
+    "mujoco>=3.1",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.setuptools.package-data]
+braco4 = ["*.xml"]

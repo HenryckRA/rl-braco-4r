@@ -1,0 +1,55 @@
+<!-- Braço de 4 juntas: base (giro em z), ombro, cotovelo e punho (giro em y).
+     Atuadores de torque: ctrl ∈ [-1, 1], torque = gear · ctrl [N·m]. -->
+<mujoco model="braco4">
+  <compiler angle="degree"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <default>
+    <joint type="hinge" damping="0.5" armature="0.01" limited="true"/>
+    <geom contype="0" conaffinity="0" rgba="0.75 0.78 0.82 1"/>
+    <motor ctrllimited="true" ctrlrange="-1 1"/>
+  </default>
+
+  <visual>
+    <global offwidth="960" offheight="720"/>
+  </visual>
+
+  <worldbody>
+    <light pos="0 0 3" dir="0 0 -1" diffuse="0.8 0.8 0.8"/>
+    <geom name="chao" type="plane" size="1.5 1.5 0.1" rgba="0.92 0.91 0.88 1"/>
+
+    <body name="base" pos="0 0 0.05">
+      <joint name="j1_base" axis="0 0 1" range="-180 180"/>
+      <geom type="cylinder" size="0.07 0.05" mass="2.0" rgba="0.2 0.25 0.35 1"/>
+      <geom type="capsule" fromto="0 0 0 0 0 0.25" size="0.04" mass="1.0"/>
+
+      <body name="braco" pos="0 0 0.25">
+        <joint name="j2_ombro" axis="0 1 0" range="-90 90"/>
+        <geom type="capsule" fromto="0 0 0 0 0 0.35" size="0.035" mass="1.0"/>
+
+        <body name="antebraco" pos="0 0 0.35">
+          <joint name="j3_cotovelo" axis="0 1 0" range="-150 150"/>
+          <geom type="capsule" fromto="0 0 0 0 0 0.30" size="0.03" mass="0.7" rgba="0.17 0.43 0.64 1"/>
+
+          <body name="mao" pos="0 0 0.30">
+            <joint name="j4_punho" axis="0 1 0" range="-120 120"/>
+            <geom type="capsule" fromto="0 0 0 0 0 0.10" size="0.025" mass="0.3" rgba="0.17 0.43 0.64 1"/>
+            <site name="ponta" pos="0 0 0.10" size="0.015" rgba="0.08 0.14 0.23 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- alvo: só visual (mocap), não interage com o braço -->
+    <body name="alvo" mocap="true" pos="0.4 0 0.3">
+      <geom type="sphere" size="0.025" rgba="0.91 0.51 0.25 0.7"/>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="m1_base"     joint="j1_base"     gear="3"/>
+    <motor name="m2_ombro"    joint="j2_ombro"    gear="15"/>
+    <motor name="m3_cotovelo" joint="j3_cotovelo" gear="5"/>
+    <motor name="m4_punho"    joint="j4_punho"    gear="0.5"/>
+  </actuator>
+</mujoco>
